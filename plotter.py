@@ -20,8 +20,8 @@ def plot_data(data, title):
     bars = ax.bar(items, counts, color=sns.color_palette("viridis", len(items)))  # Add color to the bars
 
     # Add labels and title
-    ax.set_xlabel("Items", fontsize=14)
-    ax.set_ylabel("Counts", fontsize=14)
+    ax.set_xlabel("Users", fontsize=14)
+    ax.set_ylabel("Count", fontsize=14)
     ax.set_title(title, fontsize=16)
 
     # Increase the font size of the ticks
