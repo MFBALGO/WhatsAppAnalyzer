@@ -1,0 +1,32 @@
+<!doctype html>
+<title>Chat Analysis Results</title>
+<h1>Chat Analysis Results</h1>
+{% for name, rows in results.items() %}
+<h2>{{ name }}</h2>
+<table>
+    <thead>
+        <tr>
+            {% if name == "Hourly Message Counts" %}
+            <th>Time Range</th>
+            {% else %}
+            <th>User</th>
+            {% endif %}
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            {% if name == "Hourly Message Counts" %}
+            <td>{{ row['Time Range'] }}</td>
+            {% else %}
+            <td>{{ row['User'] }}</td>
+            {% endif %}
+            <td>{{ row['Count'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h2>{{ name }} Plot</h2>
+<img src="{{ url_for('static', filename='plots/' + name + '_' + identifier + '.png') }}">
+{% endfor %}
