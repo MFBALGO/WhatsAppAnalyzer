@@ -37,7 +37,9 @@ def read_chat(file):
             print(f'Error parsing line: {line}')
     if current_message:
         messages.append(current_message)
-    return pd.DataFrame(messages)
+    message_df = pd.DataFrame(messages)
+    message_df.to_csv("message_df.csv", index=False)
+    return message_df
 
 
 
@@ -50,28 +52,3 @@ def clean_username(username):
 
 
 
-# def parse_chat(file):
-#     # Initialize an empty list
-#     data = []
-#
-#     # Read the file
-#     for line in file:
-#         try:
-#             # Search for the pattern
-#             match = re.search(pattern, line.decode('utf-8'))
-#             if match:
-#                 # Extract the timestamp, user, and message from the line
-#                 timestamp_str, user, message = match.groups()
-#
-#                 # Convert the timestamp string to a datetime object
-#                 timestamp = parse_date(timestamp_str)
-#
-#                 # Add the data to the list
-#                 data.append({'Timestamp': timestamp, 'User': user, 'Message': message})
-#         except Exception as e:
-#             print(f"Error parsing line: {e}")
-#
-#     # Convert the list to a DataFrame
-#     df = pd.DataFrame(data)
-#
-#     return df

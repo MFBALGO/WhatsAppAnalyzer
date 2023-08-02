@@ -4,12 +4,11 @@ import os
 import time
 import matplotlib
 import glob
+import pandas as pd
 matplotlib.use('Agg')
 
 
 def plot_data(data, title):
-
-
     # Set figure style
     sns.set(style="whitegrid")
 
@@ -55,7 +54,8 @@ def plot_results(results, identifier):
     plot_data(results.sticker_counts, f'sticker_counts_{identifier}')
     plot_data(results.audio_counts, f'audio_counts_{identifier}')
     plot_data(results.hourly_message_counts, f'hourly_message_counts_{identifier}')
-
+    plot_sentiment_counts(results.sentiment_scores, identifier)
+    plot_first_responder_counts(results.first_responder_counts, identifier)
 
 
 def delete_old_plots():
@@ -64,4 +64,42 @@ def delete_old_plots():
         os.remove(f)
 
 
+def plot_sentiment_counts(sentiment_counts, identifier):
+    # Create DataFrame from sentiment_counts
+    df_sentiment = pd.DataFrame.from_dict(sentiment_counts, orient='index').reset_index()
+    df_sentiment.columns = ['User', 'Positive', 'Negative', 'Neutral']
 
+    # Set figure style
+    sns.set(style="whitegrid")
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    df_sentiment.plot(kind='bar', x='User', stacked=True, ax=ax, colormap='viridis')
+
+    # Add labels and title
+    ax.set_xlabel("Users", fontsize=14)
+    ax.set_ylabel("Count", fontsize=14)
+    ax.set_title(f'Sentiment Counts {identifier}', fontsize=16)
+
+    # Increase the font size of the ticks
+    ax.tick_params(labelsize=12)
+
+    # Rotate x-axis labels
+    plt.xticks(rotation=90)
+
+    plt.tight_layout()
+    plt.savefig(f'static/plots/sentiment_scores_{identifier}.png')
+    plt.close()
+
+
+def plot_first_responder_counts(first_responder_counts, identifier):
+    # Convert nested dictionary to DataFrame
+    df_first_responders = pd.DataFrame.from_dict(first_responder_counts, orient='index')
+
+    # Plot heat map
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(df_first_responders, cmap='viridis')
+    plt.title(f'First Responder Counts {identifier}')
+    plt.tight_layout()
+    plt.savefig(f'static/plots/first_responder_counts_{identifier}.png')
+    plt.close()

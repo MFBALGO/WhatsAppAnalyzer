@@ -2,6 +2,7 @@ import pandas as pd
 import re
 import plotter
 import chat_parser
+from textblob import TextBlob
 
 
 class DataAnalyzer:
@@ -13,6 +14,8 @@ class DataAnalyzer:
         self.gif_counts = dict.fromkeys(df['user'].unique(), 0)
         self.sticker_counts = dict.fromkeys(df['user'].unique(), 0)
         self.audio_counts = dict.fromkeys(df['user'].unique(), 0)
+        self.sentiment_scores = {user: {'positive': 0, 'negative': 0, 'neutral': 0} for user in df['user'].unique()}
+        self.first_responder_counts = self.analyze_first_responders(df)
 
         for i, row in df.iterrows():
             message = row['message']
@@ -31,6 +34,8 @@ class DataAnalyzer:
             elif 'audio omitted' in message:
                 self.audio_counts[user] += 1
 
+
+
         # Sort the data
         self.link_counts = {k: v for k, v in sorted(self.link_counts.items(), key=lambda item: item[1], reverse=True)}
         self.image_counts = {k: v for k, v in sorted(self.image_counts.items(), key=lambda item: item[1], reverse=True)}
@@ -42,6 +47,41 @@ class DataAnalyzer:
         df['Hour'] = df['date'].dt.hour
         self.hourly_message_counts = df.groupby('Hour').size().to_dict()
 
+        self.analyze_sentiment(df)
+
+    def analyze_sentiment(self, df):
+        for i, row in df.iterrows():
+            message = row['message']
+            user = row['user']
+
+            # Analyzing sentiment for each message
+            sentiment_score = TextBlob(message).sentiment.polarity
+            # if sentiment_score < -0.5:
+            #     print(f"User: {user},  message: {message},  Score: {sentiment_score}")
+            # Categorizing sentiment and incrementing corresponding count
+            if sentiment_score > 0.001:
+                self.sentiment_scores[user]['positive'] += 1
+            elif sentiment_score < -0.001:
+                self.sentiment_scores[user]['negative'] += 1
+            else:
+                self.sentiment_scores[user]['neutral'] += 1
+
+    def analyze_first_responders(self, df):
+        first_responder_counts = {user: {responder: 0 for responder in df['user'].unique() if responder != user} for
+                                  user in df['user'].unique()}
+
+        # Iterate through the DataFrame to find responses
+        last_message_user = None
+        for i, row in df.iterrows():
+            current_user = row['user']
+
+            # Check if the last message was from a different user
+            if last_message_user is not None and current_user != last_message_user:
+                first_responder_counts[last_message_user][current_user] += 1
+
+            last_message_user = current_user
+
+        return first_responder_counts
 
 
 # Function to check if a string is a URL

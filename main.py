@@ -12,7 +12,7 @@ def upload_file():
     if request.method == 'POST':
         f = request.files['file']
         results = data_analyzer.analyze_chat(f)  # replace with your actual function
-
+        print(results.sentiment_scores)
         # Generate a unique identifier
         identifier = str(int(time.time()))
         plotter.plot_results(results, identifier)
