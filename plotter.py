@@ -56,6 +56,7 @@ def plot_results(results, identifier):
     plot_data(results.hourly_message_counts, f'hourly_message_counts_{identifier}')
     plot_sentiment_counts(results.sentiment_scores, identifier)
     plot_first_responder_counts(results.first_responder_counts, identifier)
+    plot_hourly_activity(results.hourly_activity, identifier)
 
 
 def delete_old_plots():
@@ -102,4 +103,20 @@ def plot_first_responder_counts(first_responder_counts, identifier):
     plt.title(f'First Responder Counts {identifier}')
     plt.tight_layout()
     plt.savefig(f'static/plots/first_responder_counts_{identifier}.png')
+    plt.close()
+
+
+def plot_hourly_activity(hourly_activity, identifier):
+    plt.figure(figsize=(12, 8))
+
+    # Plot a line for each user
+    for user, activity in hourly_activity.items():
+        plt.plot(list(range(24)), list(activity.values()), label=user)
+
+    plt.xlabel('Hour of Day')
+    plt.ylabel('Message Count')
+    plt.title(f'Message Count Per User Per Hour {identifier}')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'static/plots/hourly_activity_{identifier}.png')
     plt.close()

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Users</title>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+</head>
+<body>
+    <h1>Select Users to Analyze</h1>
+    <form action="/select_users" method="post">
+        <input type="hidden" name="file_path" value="{{ file_path }}">
+        <select name="users_to_include" id="users" multiple="multiple">
+            {% for user in users %}
+            <option value="{{ user }}">{{ user }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Analyze</button>
+    </form>
+    <script>
+        $(document).ready(function() {
+            $('#users').select2({
+                placeholder: "Select users to analyze",
+                allowClear: true,
+                maximumSelectionLength: 20 // Limit the number of selections
+            });
+        });
+    </script>
+</body>
+</html>

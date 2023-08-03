@@ -1,47 +1,64 @@
 from flask import Flask, request, render_template
-import data_analyzer
+from data_analyzer import DataAnalyzer
 import plotter
 import chat_parser
 import time
-
+import os
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        # Parsing the chat to a df
         f = request.files['file']
-        results = data_analyzer.analyze_chat(f)  # replace with your actual function
-        print(results.sentiment_scores)
-        # Generate a unique identifier
         identifier = str(int(time.time()))
-        plotter.plot_results(results, identifier)
+        file_path = os.path.join('uploads', f'{identifier}.txt')
+        f.save(file_path)  # Save the file temporarily
 
-        return render_template('results.html', results=results.__dict__, identifier=identifier)  # pass the results to the template
+        message_df = chat_parser.read_chat(file_path)
+
+        # Check user count
+        all_users = message_df['user'].unique()
+        user_cap = 20  # Adjust as needed
+        if len(all_users) > user_cap:
+            return render_template('select_users.html', users=all_users, file_path=file_path)  # Pass the file path
+
+        # Analysis
+        analyzed_results = DataAnalyzer(message_df, all_users)
+
+        # Generate a unique identifier for plots then plot
+        identifier = str(int(time.time()))
+        plotter.plot_results(analyzed_results, identifier)
+
+        return render_template('results.html', results=analyzed_results.__dict__, identifier=identifier)  # pass the results to the template
+
     return render_template('upload.html')
-
-# @app.route("/", methods=["GET", "POST"])
-# def upload_file():
-#     if request.method == "POST":
-#         file = request.files["file"]
-#         if file:
-#             file.save("chat.txt")
-#             chat = chat_parser.parse_chat("chat.txt")
-#             results = data_analyzer.analyze_chat(chat)
-#
-#             # Generate a unique identifier
-#             identifier = str(int(time.time()))
-#
-#             plotter.plot_results(results, identifier)
-#
-#             return render_template("results.html", results=results, identifier=identifier)
-#     return render_template("upload.html")
 
 
 @app.after_request
 def add_header(response):
     response.headers['Cache-Control'] = 'no-store'
     return response
+
+@app.route('/select_users', methods=['POST'])
+def select_users():
+    users_to_include = request.form.getlist('users_to_include')
+    file_path = request.form['file_path']  # Retrieve the file path from form data
+    message_df = chat_parser.read_chat(file_path)  # Read from the saved file
+
+    # Analysis
+    analyzed_results = DataAnalyzer(message_df, users_to_include)
+
+    # Generate a unique identifier for plots then plot
+    identifier = str(int(time.time()))
+    plotter.plot_results(analyzed_results, identifier)
+    return render_template('results.html', results=analyzed_results.__dict__, identifier=identifier)
+
+@app.route('/select_users_page')
+def select_users_page():
+    users = get_users()  # Retrieve the list of users from your data
+    return render_template('select_users.html', users=users)
 
 
 if __name__ == '__main__':
