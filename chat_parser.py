@@ -39,7 +39,7 @@ def read_chat(file_path):
         if current_message:
             messages.append(current_message)
         message_df = pd.DataFrame(messages)
-        message_df.to_csv("message_df.csv", index=False)
+        # message_df.to_csv("message_df.csv", index=False)
         return message_df
 
 

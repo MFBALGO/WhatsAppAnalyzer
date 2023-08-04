@@ -1,10 +1,13 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from datetime import timedelta
 import os
 import time
 import matplotlib
 import glob
 import pandas as pd
+from matplotlib.widgets import Slider
 matplotlib.use('Agg')
 
 
@@ -57,6 +60,10 @@ def plot_results(results, identifier):
     plot_sentiment_counts(results.sentiment_scores, identifier)
     plot_first_responder_counts(results.first_responder_counts, identifier)
     plot_hourly_activity(results.hourly_activity, identifier)
+
+    # Extract the timestamps and descriptions from the results (assuming they are included in the results)
+    description_changes = results.group_description_changes
+    plot_description_timeline(description_changes, identifier)
 
 
 def delete_old_plots():
@@ -120,3 +127,32 @@ def plot_hourly_activity(hourly_activity, identifier):
     plt.tight_layout()
     plt.savefig(f'static/plots/hourly_activity_{identifier}.png')
     plt.close()
+
+
+
+
+def plot_description_timeline(description_changes, identifier):
+    timestamps, descriptions = zip(*description_changes)
+    y_index = range(len(descriptions))
+
+    # Create a figure and axis with increased size
+    fig, ax = plt.subplots(figsize=(20, 10))
+
+    # Plot the markers without lines connecting them
+    ax.plot(timestamps, y_index, marker='o', color='blue', linestyle='None') # Note the 'None' linestyle
+
+    # Add annotations with increased font size, and set the font family to support emojis and Arabic text
+    for i, desc in enumerate(descriptions):
+        ax.annotate(desc, (timestamps[i], y_index[i]), fontsize=12, family='Segoe UI Emoji')
+
+    # Additional plot styling, such as setting labels, title, etc.
+    # ...
+
+    # Save the plot
+    plt.tight_layout()
+    plt.savefig(f'static/plots/group_description_changes_{identifier}.png', format='png')
+    plt.close()
+
+
+
+

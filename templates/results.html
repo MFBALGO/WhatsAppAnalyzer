@@ -2,6 +2,12 @@
 <title>Chat Analysis Results</title>
 <h1>Chat Analysis Results</h1>
 {% for name, rows in results.items() %}
-<h2>{{ name }} Plot</h2>
-<img src="{{ url_for('static', filename='plots/' + name + '_' + identifier + '.png') }}">
+    {% if name != 'group_description_changes' %}
+        <h2>{{ name }} Plot</h2>
+        <img src="{{ url_for('static', filename='plots/' + name + '_' + identifier + '.png') }}">
+    {% endif %}
 {% endfor %}
+<h2>group_description_changes Plot</h2>
+<div style="overflow-x: auto; width: 100%;">
+    <img src="{{ url_for('static', filename='plots/group_description_changes_' + identifier + '.png') }}" alt="Group Description Timeline">
+</div>

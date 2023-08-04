@@ -6,7 +6,7 @@ from textblob import TextBlob
 
 
 class DataAnalyzer:
-    def __init__(self, df, users_to_include=None, user_cap=20):
+    def __init__(self, df, users_to_include=None, user_cap=30):
         # If users_to_include is None and user count exceeds cap, raise an error
         if users_to_include is None and len(df['user'].unique()) > user_cap:
             raise ValueError(f"Too many users. Please specify up to {user_cap} users to include.")
@@ -25,6 +25,7 @@ class DataAnalyzer:
         self.sentiment_scores = {user: {'positive': 0, 'negative': 0, 'neutral': 0} for user in df['user'].unique()}
         self.first_responder_counts = self.analyze_first_responders(df)
         self.hourly_activity = self.analyze_activity_by_hour(df)
+        self.group_description_changes = self.extract_group_descriptions_with_timestamps(df)
 
         for i, row in df.iterrows():
             message = row['message']
@@ -52,6 +53,7 @@ class DataAnalyzer:
         self.gif_counts = {k: v for k, v in sorted(self.gif_counts.items(), key=lambda item: item[1], reverse=True)}
         self.sticker_counts = {k: v for k, v in sorted(self.sticker_counts.items(), key=lambda item: item[1], reverse=True)}
         self.audio_counts = {k: v for k, v in sorted(self.audio_counts.items(), key=lambda item: item[1], reverse=True)}
+
 
         df = df.copy()
         df['Hour'] = df['date'].dt.hour
@@ -108,6 +110,30 @@ class DataAnalyzer:
 
         # Convert to dictionary for consistency with other results
         return hourly_activity.to_dict(orient='index')
+
+    def extract_group_descriptions_with_timestamps(self, df):
+        # Regular expression pattern to match the group description change pattern
+        pattern = r'changed the subject to “(.+?)”'
+        regex = re.compile(pattern)
+
+        # Lists to store extracted group descriptions and timestamps
+        group_descriptions = []
+        timestamps = []
+
+        # Iterate through the messages and extract group descriptions and timestamps
+        for date, message in zip(df['date'], df['message']):
+            match = regex.search(message)
+            if match:
+                # Extract the group description and timestamp, add them to the lists
+                description = match.group(1)
+                group_descriptions.append(description)
+                timestamps.append(pd.to_datetime(date))
+
+        group_description_changes = list(zip(timestamps, group_descriptions))
+        
+        return group_description_changes
+
+
 
 
 # Function to check if a string is a URL
