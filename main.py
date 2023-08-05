@@ -13,7 +13,7 @@ def upload_file():
         # Parsing the chat to a df
         f = request.files['file']
         identifier = str(int(time.time()))
-        file_path = os.path.join('uploads', f'{identifier}.txt')
+        file_path = os.path.join('uploads', f'{f.filename}_{identifier}.txt')
         f.save(file_path)  # Save the file temporarily
 
         message_df = chat_parser.read_chat(file_path)
