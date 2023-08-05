@@ -63,7 +63,8 @@ def plot_results(results, identifier):
 
     # Extract the timestamps and descriptions from the results (assuming they are included in the results)
     description_changes = results.group_description_changes
-    plot_description_timeline(description_changes, identifier)
+    if description_changes:
+        plot_description_timeline(description_changes, identifier)
 
 
 def delete_old_plots():
