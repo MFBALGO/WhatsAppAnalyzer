@@ -25,7 +25,8 @@ class DataAnalyzer:
         self.sentiment_scores = {user: {'positive': 0, 'negative': 0, 'neutral': 0} for user in df['user'].unique()}
         self.first_responder_counts = self.analyze_first_responders(df)
         self.hourly_activity = self.analyze_activity_by_hour(df)
-        self.group_description_changes = self.extract_group_descriptions_with_timestamps(df)
+        if self.extract_group_descriptions_with_timestamps(df) != None:
+            self.group_description_changes = self.extract_group_descriptions_with_timestamps(df)
 
         for i, row in df.iterrows():
             message = row['message']

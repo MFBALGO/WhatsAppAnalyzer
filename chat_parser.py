@@ -5,8 +5,7 @@ import unicodedata
 from dateutil.parser import parse
 
 # Regular expression pattern to match lines in the chat history
-pattern = r"\[(\d+\/\d+\/\d+, \d+:\d+:\d+ [APM]+)\] ([^:]+): (.*)"
-
+pattern = r"\[(\d{4}-\d{1,2}-\d{1,2}, \d{1,2}:\d{1,2}:\d{1,2} [AP]M)\] ([^:]+): (.*)"
 
 
 def read_chat(file_path):
@@ -20,7 +19,7 @@ def read_chat(file_path):
             if match:
                 date_str, user, message = match.groups()
                 user = clean_username(user)
-                for fmt in ('%m/%d/%y, %I:%M:%S %p', '%d/%m/%Y, %I:%M:%S %p'):
+                for fmt in ('%m/%d/%y, %I:%M:%S %p', '%d/%m/%Y, %I:%M:%S %p', '%Y-%m-%d, %I:%M:%S %p'):
                     try:
                         date = datetime.strptime(date_str, fmt)
                         break

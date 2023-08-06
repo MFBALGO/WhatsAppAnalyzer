@@ -17,7 +17,7 @@ def upload_file():
         f.save(file_path)  # Save the file temporarily
 
         message_df = chat_parser.read_chat(file_path)
-
+        print(message_df)
         # Check user count
         all_users = message_df['user'].unique()
         user_cap = 30  # Adjust as needed
@@ -62,4 +62,4 @@ def select_users_page():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=80, host="0.0.0.0")
