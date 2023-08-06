@@ -6,7 +6,7 @@ from textblob import TextBlob
 
 
 class DataAnalyzer:
-    def __init__(self, df, users_to_include=None, user_cap=30):
+    def __init__(self, df, users_to_include=None, user_cap=50):
         # If users_to_include is None and user count exceeds cap, raise an error
         if users_to_include is None and len(df['user'].unique()) > user_cap:
             raise ValueError(f"Too many users. Please specify up to {user_cap} users to include.")

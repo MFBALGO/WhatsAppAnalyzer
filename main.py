@@ -20,7 +20,7 @@ def upload_file():
         print(message_df)
         # Check user count
         all_users = message_df['user'].unique()
-        user_cap = 30  # Adjust as needed
+        user_cap = 50  # Adjust as needed
         if len(all_users) > user_cap:
             return render_template('select_users.html', users=all_users, file_path=file_path)  # Pass the file path
 
