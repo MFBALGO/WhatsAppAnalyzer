@@ -57,9 +57,11 @@ def plot_results(results, identifier):
     plot_data(results.sticker_counts, f'sticker_counts_{identifier}')
     plot_data(results.audio_counts, f'audio_counts_{identifier}')
     plot_data(results.hourly_message_counts, f'hourly_message_counts_{identifier}')
+    plot_data(results.deleted_message_counts, f'deleted_message_counts_{identifier}')
     plot_sentiment_counts(results.sentiment_scores, identifier)
     plot_first_responder_counts(results.first_responder_counts, identifier)
     plot_hourly_activity(results.hourly_activity, identifier)
+
 
     # Extract the timestamps and descriptions from the results (assuming they are included in the results)
     description_changes = results.group_description_changes
@@ -140,7 +142,7 @@ def plot_description_timeline(description_changes, identifier):
     fig, ax = plt.subplots(figsize=(20, 10))
 
     # Plot the markers without lines connecting them
-    ax.plot(timestamps, y_index, marker='o', color='blue', linestyle='None') # Note the 'None' linestyle
+    ax.plot(timestamps, y_index, marker='o', linestyle='None') # Note the 'None' linestyle
 
     # Add annotations with increased font size, and set the font family to support emojis and Arabic text
     for i, desc in enumerate(descriptions):
@@ -153,6 +155,8 @@ def plot_description_timeline(description_changes, identifier):
     plt.tight_layout()
     plt.savefig(f'static/plots/group_description_changes_{identifier}.png', format='png')
     plt.close()
+
+
 
 
 

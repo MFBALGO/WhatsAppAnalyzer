@@ -22,6 +22,7 @@ class DataAnalyzer:
         self.gif_counts = dict.fromkeys(df['user'].unique(), 0)
         self.sticker_counts = dict.fromkeys(df['user'].unique(), 0)
         self.audio_counts = dict.fromkeys(df['user'].unique(), 0)
+        self.deleted_message_counts = dict.fromkeys(df['user'].unique(), 0)
         self.sentiment_scores = {user: {'positive': 0, 'negative': 0, 'neutral': 0} for user in df['user'].unique()}
         self.first_responder_counts = self.analyze_first_responders(df)
         self.hourly_activity = self.analyze_activity_by_hour(df)
@@ -44,7 +45,8 @@ class DataAnalyzer:
                 self.sticker_counts[user] += 1
             elif 'audio omitted' in message:
                 self.audio_counts[user] += 1
-
+            elif 'This message was deleted' in message:
+                self.deleted_message_counts[user] += 1
 
 
         # Sort the data
@@ -54,6 +56,7 @@ class DataAnalyzer:
         self.gif_counts = {k: v for k, v in sorted(self.gif_counts.items(), key=lambda item: item[1], reverse=True)}
         self.sticker_counts = {k: v for k, v in sorted(self.sticker_counts.items(), key=lambda item: item[1], reverse=True)}
         self.audio_counts = {k: v for k, v in sorted(self.audio_counts.items(), key=lambda item: item[1], reverse=True)}
+        self.deleted_message_counts = {k: v for k, v in sorted(self.deleted_message_counts.items(), key=lambda item: item[1], reverse=True)}
 
 
         df = df.copy()
@@ -133,7 +136,6 @@ class DataAnalyzer:
         group_description_changes = list(zip(timestamps, group_descriptions))
         
         return group_description_changes
-
 
 
 

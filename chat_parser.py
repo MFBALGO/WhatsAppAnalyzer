@@ -13,7 +13,7 @@ def read_chat(file_path):
         messages = []
         current_message = None
         for line in file:
-            line = line.strip()  # decode the line from bytes to string
+            line = line.strip().replace('‎', '')  # decode the line from bytes to string
             #print(f'Parsing line: {line}')
             match = re.match(r'\[(.*?)\] (.*?): (.*)', line)
             if match:
@@ -38,7 +38,7 @@ def read_chat(file_path):
         if current_message:
             messages.append(current_message)
         message_df = pd.DataFrame(messages)
-        # message_df.to_csv("message_df.csv", index=False)
+        message_df.to_csv("message_df.csv", index=False)
         return message_df
 
 
