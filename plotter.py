@@ -24,7 +24,7 @@ def plot_data(data, title):
     # Add labels and title
     ax.set_xlabel("Users", fontsize=14)
     ax.set_ylabel("Count", fontsize=14)
-    ax.set_title(title, fontsize=16)
+    # ax.set_title(title, fontsize=16)
 
     # Increase the font size of the ticks
     ax.tick_params(labelsize=12)
@@ -90,7 +90,7 @@ def plot_sentiment_counts(sentiment_counts, identifier):
     # Add labels and title
     ax.set_xlabel("Users", fontsize=14)
     ax.set_ylabel("Count", fontsize=14)
-    ax.set_title(f'Sentiment Counts {identifier}', fontsize=16)
+    # ax.set_title(f'Sentiment Counts {identifier}', fontsize=16)
 
     # Increase the font size of the ticks
     ax.tick_params(labelsize=12)
@@ -110,7 +110,7 @@ def plot_first_responder_counts(first_responder_counts, identifier):
     # Plot heat map
     plt.figure(figsize=(12, 8))
     sns.heatmap(df_first_responders, cmap='viridis')
-    plt.title(f'First Responder Counts {identifier}')
+    # plt.title(f'First Responder Counts {identifier}')
     plt.tight_layout()
     plt.savefig(f'static/plots/first_responder_counts_{identifier}.png')
     plt.close()
@@ -125,7 +125,7 @@ def plot_hourly_activity(hourly_activity, identifier):
 
     plt.xlabel('Hour of Day')
     plt.ylabel('Message Count')
-    plt.title(f'Message Count Per User Per Hour {identifier}')
+    # plt.title(f'Message Count Per User Per Hour {identifier}')
     plt.legend()
     plt.tight_layout()
     plt.savefig(f'static/plots/hourly_activity_{identifier}.png')
