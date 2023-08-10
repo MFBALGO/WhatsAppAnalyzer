@@ -55,7 +55,7 @@ def upload_file():
             message_df = chat_parser.read_chat(file_path)
         except Exception as e:
             app.logger.error(f"Error parsing the chat: {e}")
-            return render_template("400.html", error_message="Unable to process the uploaded chat. Please ensure it's a valid format."), 400
+            return render_template("400.html", error_message="Unable to process the uploaded chat."), 400
 
         # Check user count
         all_users = message_df['user'].unique()
