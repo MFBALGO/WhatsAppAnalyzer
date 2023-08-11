@@ -1,86 +1,80 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload WhatsApp Chat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS CSS for scroll animations -->
+    <link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #DCF8C6;
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
             display: flex;
+            align-items: center;
             height: 100vh;
+            overflow: hidden;
+        }
+        .upload-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: auto;
+        }
+        .btn-primary {
+            background: #34B7F1;
+            border: none;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover {
+            background: #2A9FD6;
+        }
+        .instructions {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .step-icon {
+            background: #34B7F1;
+            color: #ffffff;
+            width: 30px;
+            height: 30px;
+            display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            width: 70%;
-            max-width: 600px;
-        }
-
-        h2, h3 {
-            margin-bottom: 20px;
-        }
-
-        ol {
-            margin-bottom: 20px;
-        }
-
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #2980b9;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h2>Upload Your WhatsApp Chat</h2>
-    <form action="/" method="post" enctype="multipart/form-data">
-        <input type="file" name="file"><br><br>
-        <button type="submit">Upload</button>
-    </form>
-
-    <div class="instruction-container">
-        <h3>How to Export Your WhatsApp Chat:</h3>
-
-        <h4>For iPhone Users:</h4>
-        <ol>
-            <li>Open the individual or group chat you want to save from your WhatsApp.</li>
-            <li>Tap on the chat name at the top to open chat details.</li>
-            <li>Scroll down and tap on "Export Chat".</li>
-            <li>Choose to <b>not</b> include media files.</li>
-            <li>Select WhatsApp or another app to send the chat to.</li>
-            <li>Download and extract the chat file as .txt and upload it here.</li>
-        </ol>
-
-        <h4>For Android Users:</h4>
-        <ol>
-            <li>Open the individual or group chat you want to save from your WhatsApp.</li>
-            <li>Tap on the three dots in the top right corner > More > Export chat.</li>
-            <li>Choose to <b>not</b> include media files.</li>
-            <li>Select WhatsApp or another app to send the chat to.</li>
-            <li>Download and extract the chat file as .txt and upload it here.</li>
-        </ol>
+    <div class="container upload-container" data-aos="fade-up">
+        <h2 class="mb-4 text-center">Analyze Your WhatsApp Chat</h2>
+        <form action="/" method="post" enctype="multipart/form-data" class="mb-4">
+            <div class="mb-3">
+                <label for="chatFile" class="form-label">Choose your chat file</label>
+                <input type="file" class="form-control" id="chatFile" name="file">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Upload</button>
+        </form>
+        <div class="instructions">
+            <h4 class="mb-3">How to Export Your WhatsApp Chat:</h4>
+            <div class="d-flex align-items-center mb-2"><div class="step-icon">1</div> Open the individual or group chat in WhatsApp.</div>
+            <div class="d-flex align-items-center mb-2"><div class="step-icon">2</div> Tap on the chat name to open details.</div>
+            <div class="d-flex align-items-center mb-2"><div class="step-icon">3</div> Choose "Export Chat" option.</div>
+            <div class="d-flex align-items-center"><div class="step-icon">4</div> Avoid including media files and save the chat.</div>
+        </div>
     </div>
-</div>
-
+    <!-- Bootstrap 5 JS, Popper.js, and AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 </html>

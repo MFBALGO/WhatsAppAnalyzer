@@ -39,7 +39,7 @@ def upload_file():
 
         if not allowed_file(f.filename):
             app.logger.warning(f"Unsupported file upload attempt: {f.filename}")
-            return render_template("400.html", error_message="Unsupported file upload attempt, ensure it's a valid format"), 400
+            return render_template("400.html", error_message="Unsupported file upload attempt, ensure it's a valid format (.txt)"), 400
 
         # Process the file
         file_path = os.path.join('uploads', f'{f.filename}_{identifier}.txt')
@@ -55,7 +55,8 @@ def upload_file():
             message_df = chat_parser.read_chat(file_path)
         except Exception as e:
             app.logger.error(f"Error parsing the chat: {e}")
-            return render_template("400.html", error_message="Unable to process the uploaded chat."), 400
+            return render_template("400.html", error_message="Unable to process the uploaded chat.\n"
+                                                             "Will analyze logs and fix"), 400
 
         # Check user count
         all_users = message_df['user'].unique()

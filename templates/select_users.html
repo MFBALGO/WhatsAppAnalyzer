@@ -1,35 +1,84 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Users</title>
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <title>Select Users for Analysis</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS CSS for scroll animations -->
+    <link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+            padding: 5% 0;
+        }
+        .select-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: auto;
+        }
+        .user-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background: #f093fb;
+            border: none;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover {
+            background: #e056ef;
+        }
+    </style>
 </head>
 <body>
-    <h1>Select Users to Analyze</h1>
-    <form action="/select_users" method="post">
-        <input type="hidden" name="file_path" value="{{ file_path }}">
-        <select name="users_to_include" id="users" multiple="multiple">
+    <div class="container select-container" data-aos="fade-up">
+        <h2 class="mb-4 text-center">Select Users for Analysis</h2>
+
+<input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for users..." onkeyup="searchUsers()">
+<form action="/select_users" method="post" class="mb-4">
             {% for user in users %}
-            <option value="{{ user }}">{{ user }}</option>
+            <div class="user-card mb-3">
+                <span>{{ user }}</span>
+                <input type="checkbox" name="users_to_include" value="{{ user }}" class="form-check-input">
+            </div>
             {% endfor %}
-        </select>
-        <button type="submit">Analyze</button>
-    </form>
+            <input type="hidden" name="file_path" value="{{ file_path }}"><button type="submit" class="btn btn-primary btn-block">Analyze</button>
+        </form>
+    </div>
+    <!-- Bootstrap 5 JS, Popper.js, and AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#users').select2({
-                placeholder: "Select users to analyze",
-                allowClear: true,
-                maximumSelectionLength: 20 // Limit the number of selections
-            });
-        });
+        AOS.init();
     </script>
 </body>
 </html>
+
+<script>
+    function searchUsers() {
+        let input = document.getElementById('searchInput');
+        let filter = input.value.toLowerCase();
+        let userCards = document.querySelectorAll('.user-card');
+        
+        userCards.forEach(card => {
+            let userName = card.querySelector('span').textContent.toLowerCase();
+            if (userName.includes(filter)) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+</script>

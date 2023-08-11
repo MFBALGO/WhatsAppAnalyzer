@@ -1,35 +1,58 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Chat Analysis Results</title>
+    <title>Analysis Results</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS CSS for scroll animations -->
+    <link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #DCF8C6;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #66d37a 0%, #36a69a 100%);
+            padding: 5% 0;
         }
-        .card {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
+        .results-container {
+            background: #ffffff;
+            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            margin: auto;
         }
-        img {
-            max-width: 100%;
-            height: auto;
+        .result-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .result-header {
+            background: #36a69a;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
         }
     </style>
 </head>
 <body>
-    <h1>WhatsApp Chat Analysis Results</h1>
-    {% for name, rows in results.items() %}
-    <div class="card">
-        <h2>{{ name.replace("_", " ").title() }}</h2>
-        <img src="{{ url_for('static', filename='plots/' + name + '_' + identifier + '.png') }}">
+    <div class="container results-container" data-aos="fade-up">
+        <h2 class="mb-4 text-center" style="font-size: 2.5rem; font-weight: bold; border-bottom: 5px solid #36a69a; display: inline-block; padding-bottom: 10px;">Analysis Results</h2>
+        {% for name, rows in results.items() %}
+        <div class="result-card">
+            <div class="result-header">{{ name.replace("_", " ").title() }}</div>
+            <img src="{{ url_for('static', filename='plots/' + name + '_' + identifier + '.png') }}" alt="{{ name.replace("_", " ").title() }}" class="img-fluid">
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    <!-- Bootstrap 5 JS, Popper.js, and AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 </html>

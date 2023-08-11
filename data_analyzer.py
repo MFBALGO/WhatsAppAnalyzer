@@ -45,7 +45,7 @@ class DataAnalyzer:
                 self.sticker_counts[user] += 1
             elif 'audio omitted' in message:
                 self.audio_counts[user] += 1
-            elif 'This message was deleted' in message:
+            elif 'This message was deleted' in message or 'You deleted this message' in message:
                 self.deleted_message_counts[user] += 1
 
 
